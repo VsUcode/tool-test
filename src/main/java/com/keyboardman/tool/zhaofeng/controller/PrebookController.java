@@ -1,6 +1,6 @@
 package com.keyboardman.tool.zhaofeng.controller;
 
-import com.keyboardman.tool.zhaofeng.model.HostHolder;
+import com.keyboardman.tool.zhaofeng.model.HostHolderZF;
 import com.keyboardman.tool.zhaofeng.model.PrebookZF;
 import com.keyboardman.tool.zhaofeng.service.PrebookService;
 import org.slf4j.Logger;
@@ -20,7 +20,7 @@ public class PrebookController {
 
 
     @Autowired
-    private HostHolder hostHolder;
+    private HostHolderZF hostHolderZF;
 
     @Autowired
     private PrebookService prebookService;
@@ -29,11 +29,11 @@ public class PrebookController {
      * 查看自己的预约
      * @return
      */
-    @RequestMapping("/selectBook")
+    @RequestMapping("/WxSelectBook")
     public PrebookZF selectHealthy(){
         Map<String, String> map = new HashMap<>();
 
-        String username = hostHolder.getUser().getUsername();
+        String username = hostHolderZF.getUser().getUsername();
         PrebookZF entity = prebookService.selectBook(username);
 
         return entity;
@@ -44,11 +44,11 @@ public class PrebookController {
      * @param entity
      * @return
      */
-    @RequestMapping("/addBook")
+    @RequestMapping("/WxAddBook")
     public Map<String, String> addBook(PrebookZF entity){
         Map<String, String> map = new HashMap<>();
 
-        String username = hostHolder.getUser().getUsername();
+        String username = hostHolderZF.getUser().getUsername();
         entity.setUsername(username);
 
         map = prebookService.addBook(entity);
@@ -61,11 +61,11 @@ public class PrebookController {
      * @param
      * @return
      */
-    @RequestMapping("/deleteBook")
+    @RequestMapping("/WxDeleteBook")
     public Map<String, String> deleteBook(){
         Map<String, String> map = new HashMap<>();
 
-        String username = hostHolder.getUser().getUsername();
+        String username = hostHolderZF.getUser().getUsername();
         map = prebookService.deleteBook(username);
 
         return map;

@@ -1,7 +1,7 @@
-package com.keyboardman.tool.zhaofeng.interceptor;
+package com.keyboardman.tool.root.interceptor;
 
 
-import com.keyboardman.tool.zhaofeng.model.HostHolderZF;
+import com.keyboardman.tool.root.model.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -14,12 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginRequiredInterceptor implements HandlerInterceptor {
 
     @Autowired
-    private HostHolderZF hostHolderZF;
+    private HostHolder hostHolder;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        if (hostHolderZF.getUser() == null) {
+        if (hostHolder.getUser() == null) {
             response.sendRedirect("/loginPage");
             return false;
         }

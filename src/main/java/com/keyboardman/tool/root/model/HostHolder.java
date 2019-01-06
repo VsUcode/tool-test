@@ -1,17 +1,16 @@
-package com.keyboardman.tool.zhaofeng.model;
+package com.keyboardman.tool.root.model;
 
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class HostHolder {
-    private static ThreadLocal<UserZF> users = new ThreadLocal<>();
+    private static ThreadLocal<User> users = new ThreadLocal<>();
 
-    public UserZF getUser(){
+    public User getUser(){
         return users.get();
     }
 
-    public void setUsers(UserZF user){
+    public void setUsers(User user){
         users.set(user);
     }
 

@@ -1,5 +1,6 @@
 package com.keyboardman.tool.zhaofeng.service;
 
+import com.keyboardman.tool.root.utils.RootConstant;
 import com.keyboardman.tool.zhaofeng.dao.PrebookDao;
 import com.keyboardman.tool.zhaofeng.model.PrebookZF;
 import com.keyboardman.tool.zhaofeng.utils.CommonZF;
@@ -25,7 +26,7 @@ public class PrebookService {
     public PrebookZF selectBook(String username) {
         // todo 非空判断
 
-        PrebookZF prebookZF = prebookDao.selectByUsername(username, CommonZF.STATUS_0);
+        PrebookZF prebookZF = prebookDao.selectByUsername(username, RootConstant.STATUS_0);
 
         return prebookZF;
     }
@@ -41,12 +42,12 @@ public class PrebookService {
 
         // todo 时间段排查 提高交互性
 
-        PrebookZF prebookZF = prebookDao.selectByUsername(entity.getUsername(), CommonZF.STATUS_0);
+        PrebookZF prebookZF = prebookDao.selectByUsername(entity.getUsername(), RootConstant.STATUS_0);
         if (prebookZF != null){
             map.put("msg", "已预约");
             return map;
         }
-        entity.setStatus(CommonZF.STATUS_0);
+        entity.setStatus(RootConstant.STATUS_0);
         int flag = prebookDao.insertBook(entity);
         if (flag == 1){
             map.put("msg", "success");
@@ -62,8 +63,8 @@ public class PrebookService {
     public Map<String, String> deleteBook(String username) {
         Map<String, String> map = new HashMap<>();
         // todo 非空判断
-        PrebookZF prebookZF = prebookDao.selectByUsername(username, CommonZF.STATUS_0);
-        int flag = prebookDao.deleteByid(prebookZF.getId(), CommonZF.STATUS_1);
+        PrebookZF prebookZF = prebookDao.selectByUsername(username, RootConstant.STATUS_0);
+        int flag = prebookDao.deleteByid(prebookZF.getId(), RootConstant.STATUS_1);
         if (flag == 1){
             map.put("msg", "success");
         }
@@ -80,7 +81,7 @@ public class PrebookService {
 
         Date now = new Date();
 
-        List<PrebookZF> list = prebookDao.selectBookList(type, CommonZF.STATUS_0, now);
+        List<PrebookZF> list = prebookDao.selectBookList(type, RootConstant.STATUS_0, now);
 
         return list;
     }

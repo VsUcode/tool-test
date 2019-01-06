@@ -1,7 +1,7 @@
 package com.keyboardman.tool.zhaofeng.controller;
 
 import com.keyboardman.tool.zhaofeng.model.HealthZF;
-import com.keyboardman.tool.zhaofeng.model.HostHolder;
+import com.keyboardman.tool.zhaofeng.model.HostHolderZF;
 import com.keyboardman.tool.zhaofeng.service.HealthyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public class HealthyController {
 
 
     @Autowired
-    private HostHolder hostHolder;
+    private HostHolderZF hostHolderZF;
 
     @Autowired
     private HealthyService healthyService;
@@ -27,11 +27,11 @@ public class HealthyController {
      * 查看已有的
      * @return
      */
-    @RequestMapping("/selectHealthy")
+    @RequestMapping("/WxSelectHealthy")
     public HealthZF selectHealthy(){
         Map<String, String> map = new HashMap<>();
 
-        String username = hostHolder.getUser().getUsername();
+        String username = hostHolderZF.getUser().getUsername();
         HealthZF entity = healthyService.selectHealthy(username);
 
         return entity;
@@ -55,11 +55,11 @@ public class HealthyController {
      * @param entity
      * @return
      */
-    @RequestMapping("/addHealthy")
+    @RequestMapping("/WxAddHealthy")
     public Map<String, String> addHealthy(HealthZF entity){
         Map<String, String> map = new HashMap<>();
 
-        String username = hostHolder.getUser().getUsername();
+        String username = hostHolderZF.getUser().getUsername();
         entity.setUsername(username);
 
         map = healthyService.addHealthy(entity);
@@ -73,11 +73,11 @@ public class HealthyController {
      * @param entity
      * @return
      */
-    @RequestMapping("/updateHealthy")
+    @RequestMapping("/WxUpdateHealthy")
     public Map<String, String> updateHealthy(HealthZF entity){
         Map<String, String> map = new HashMap<>();
 
-        String username = hostHolder.getUser().getUsername();
+        String username = hostHolderZF.getUser().getUsername();
         entity.setUsername(username);
 
         map = healthyService.updateHealthy(entity);
@@ -91,11 +91,11 @@ public class HealthyController {
      * @param
      * @return
      */
-    @RequestMapping("/deleteHealthy")
+    @RequestMapping("/WxDeleteHealthy")
     public Map<String, String> deleteHealthy(){
         Map<String, String> map = new HashMap<>();
 
-        String username = hostHolder.getUser().getUsername();
+        String username = hostHolderZF.getUser().getUsername();
         map = healthyService.deleteHealthy(username);
 
         return map;

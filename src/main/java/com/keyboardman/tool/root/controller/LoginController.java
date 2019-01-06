@@ -1,7 +1,7 @@
-package com.keyboardman.tool.zhaofeng.controller;
+package com.keyboardman.tool.root.controller;
 
-import com.keyboardman.tool.zhaofeng.model.UserZF;
-import com.keyboardman.tool.zhaofeng.service.LoginService;
+import com.keyboardman.tool.root.model.User;
+import com.keyboardman.tool.root.service.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +20,16 @@ public class LoginController {
     private LoginService loginService;
 
     /**
-     * 普通用户注册
+     * 用户注册
      * @param user
      * @return
      */
-    @RequestMapping("/WxReg")
-    public Map<String,String> register(UserZF user, HttpServletRequest request) throws UnsupportedEncodingException {
+    @RequestMapping("/reg")
+    public Map<String,String> register(User user, HttpServletRequest request) throws UnsupportedEncodingException {
 
         Map<String,String> data = loginService.register(user);
         if (data.get("msg").equals("success")){
-            UserZF userInfo = loginService.getUser(user.getUsername());
+            User userInfo = loginService.getUser(user.getUsername());
             userInfo.setPassword("");
             request.getSession().setAttribute("userinfo", userInfo);
         }
@@ -42,13 +42,13 @@ public class LoginController {
      * @param user
      * @return
      */
-    @RequestMapping("/WxLogin")
-    public Map<String,String> login(UserZF user, HttpServletRequest request) throws UnsupportedEncodingException {
+    @RequestMapping("/login")
+    public Map<String,String> login(User user, HttpServletRequest request) throws UnsupportedEncodingException {
 
         Map<String,String> data = loginService.login(user);
 
         if (data.get("msg").equals("success")){
-            UserZF userInfo = loginService.getUser(user.getUsername());
+            User userInfo = loginService.getUser(user.getUsername());
             userInfo.setPassword("");
             request.getSession().setAttribute("userinfo", userInfo);
         }
@@ -60,7 +60,7 @@ public class LoginController {
      * @param request
      * @return
      */
-    @RequestMapping("/WxLoginout")
+    @RequestMapping("/loginout")
     public String loginOut(HttpServletRequest request) {
         request.getSession().invalidate();
         return "redirect:/";

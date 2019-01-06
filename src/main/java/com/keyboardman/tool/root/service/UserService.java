@@ -1,12 +1,10 @@
-package com.keyboardman.tool.zhaofeng.service;
+package com.keyboardman.tool.root.service;
 
+import com.keyboardman.tool.root.dao.LoginDao;
+import com.keyboardman.tool.root.dao.UserDao;
+import com.keyboardman.tool.root.model.User;
 import com.keyboardman.tool.root.utils.RootConstant;
 import com.keyboardman.tool.root.utils.RootUtils;
-import com.keyboardman.tool.zhaofeng.dao.LoginDao;
-import com.keyboardman.tool.zhaofeng.dao.UserDao;
-import com.keyboardman.tool.zhaofeng.model.UserZF;
-import com.keyboardman.tool.zhaofeng.utils.CommonZF;
-import com.keyboardman.tool.zhaofeng.utils.ZFUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,15 +29,15 @@ public class UserService {
      */
     public Map<String, String> deleteUser(String username, String password) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
-        UserZF userZF = loginDao.selectByName(username, RootConstant.STATUS_0);
-        if (userZF != null){
+        User user = loginDao.selectByName(username, RootConstant.STATUS_0);
+        if (user != null){
             String pwd = password;
-            pwd += CommonZF.MD5_SALT;
+            pwd += RootConstant.ROOT_ZF_USER_POWER;
             pwd = RootUtils.MD5(pwd);
 
-            if (pwd.equals(userZF.getPassword())){
+            if (pwd.equals(user.getPassword())){
                 // todo sql验证
-                userDao.deleteUser(userZF.getId(), RootConstant.STATUS_1);
+                userDao.deleteUser(user.getId(), RootConstant.STATUS_1);
                 map.put("msg", "success");
                 return map;
             }
@@ -57,19 +55,19 @@ public class UserService {
      */
     public Map<String, String> changePwd(String username, String password, String newPassword) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
-        UserZF userZF = loginDao.selectByName(username, RootConstant.STATUS_0);
-        if (userZF != null){
+        User user = loginDao.selectByName(username, RootConstant.STATUS_0);
+        if (user != null){
             String pwd = password;
-            pwd += CommonZF.MD5_SALT;
+            pwd += RootConstant.ROOT_ZF_USER_POWER;
             pwd = RootUtils.MD5(pwd);
 
-            if (pwd.equals(userZF.getPassword())){
+            if (pwd.equals(user.getPassword())){
                 // todo sql验证
 
-                String newPwd = newPassword + CommonZF.MD5_SALT;
+                String newPwd = newPassword + RootConstant.ROOT_ZF_USER_POWER;
                 newPwd = RootUtils.MD5(newPwd);
 
-                userDao.updatePassword(userZF.getId(), newPwd);
+                userDao.updatePassword(user.getId(), newPwd);
                 map.put("msg", "success");
                 return map;
             }

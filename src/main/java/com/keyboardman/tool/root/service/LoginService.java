@@ -1,14 +1,11 @@
-package com.keyboardman.tool.zhaofeng.service;
+package com.keyboardman.tool.root.service;
 
+import com.keyboardman.tool.root.dao.LoginDao;
+import com.keyboardman.tool.root.model.User;
 import com.keyboardman.tool.root.utils.RootConstant;
 import com.keyboardman.tool.root.utils.RootUtils;
-import com.keyboardman.tool.zhaofeng.dao.LoginDao;
-import com.keyboardman.tool.zhaofeng.model.UserZF;
-import com.keyboardman.tool.zhaofeng.utils.CommonZF;
-import com.keyboardman.tool.zhaofeng.utils.ZFUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -25,34 +22,34 @@ public class LoginService {
      * @param user
      * @return
      */
-    public Map<String, String> register(UserZF user) throws UnsupportedEncodingException {
+    public Map<String, String> register(User user) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
 
-        map = ZFUtil.identifyUser(user);
+        // TODO 非空验证
+//        map = ZFUtil.identifyUser(user);
         if (!map.get("msg").equals("success")){
             return map;
         }
-        if (StringUtils.isEmpty(user.getPhone())){
-            map.put("msg", "联系电话不能为空");
-            return map;
-        }
+//        if (StringUtils.isEmpty(user.getPhone())){
+//            map.put("msg", "联系电话不能为空");
+//            return map;
+//        }
 
-        UserZF isUser = loginDao.selectByName(user.getUsername(), RootConstant.STATUS_0);
+        User isUser = loginDao.selectByName(user.getUsername(), RootConstant.STATUS_0);
         if (isUser != null){
             map.put("msg", "用户名已被注册");
             return map;
         }
 
-        user.setPower(CommonZF.USER_POWER);
+        user.setPower(RootConstant.ROOT_ZF_USER_POWER);
         user.setStatus(RootConstant.STATUS_0);
         //密码强度
         String password = user.getPassword();
-        password += CommonZF.MD5_SALT;
+        password += RootConstant.ROOT_ZF_USER_POWER;
         String passwordResult= null;
         passwordResult = RootUtils.MD5(password);
         user.setPassword(passwordResult);
         int flag = loginDao.addUser(user);
-        //todo 默认为登录
         if (flag == 1){
             map.put("msg", "success");
         }
@@ -64,21 +61,18 @@ public class LoginService {
      * @param user
      * @return
      */
-    public Map<String, String> login(UserZF user) throws UnsupportedEncodingException {
+    public Map<String, String> login(User user) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
 
-        map = ZFUtil.identifyUser(user);
-        if (!map.get("msg").equals("success")){
-            return map;
-        }
+        // TODO 非空验证
 
-        UserZF userZF = loginDao.selectByName(user.getUsername(), RootConstant.STATUS_0);
-        if (userZF != null){
+        User isUser = loginDao.selectByName(user.getUsername(), RootConstant.STATUS_0);
+        if (isUser != null){
             String pwd = user.getPassword();
-            pwd += CommonZF.MD5_SALT;
+            pwd += RootConstant.ROOT_ZF_USER_POWER;
             pwd = RootUtils.MD5(pwd);
 
-            if (pwd.equals(userZF.getPassword())){
+            if (pwd.equals(isUser.getPassword())){
                 map.put("msg", "success");
                 return map;
             }
@@ -95,7 +89,7 @@ public class LoginService {
      * @param username
      * @return
      */
-    public UserZF getUser(String username){
-        return loginDao.selectByName(username, RootConstant.STATUS_0);
+    public User getUser(String username){
+        return loginDao.selectByName(username,RootConstant.STATUS_0);
     }
 }

@@ -1,7 +1,7 @@
-package com.keyboardman.tool.zhaofeng.controller;
+package com.keyboardman.tool.root.controller;
 
-import com.keyboardman.tool.zhaofeng.model.HostHolderZF;
-import com.keyboardman.tool.zhaofeng.service.UserService;
+import com.keyboardman.tool.root.model.HostHolder;
+import com.keyboardman.tool.root.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,8 @@ import java.util.Map;
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-
     @Autowired
-    private HostHolderZF hostHolderZF;
+    private HostHolder hostHolder;
 
     @Autowired
     private UserService userService;
@@ -28,21 +27,28 @@ public class UserController {
      * @param password
      * @return
      */
-    @RequestMapping("/WxDeleteUser")
+    @RequestMapping("/deleteUser")
     public Map<String, String> deleteUser(String password) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
 
-        String username = hostHolderZF.getUser().getUsername();
+        String username = hostHolder.getUser().getUsername();
         map = userService.deleteUser(username, password);
 
         return map;
     }
 
-    @RequestMapping("/WxChangePwd")
+    /**
+     * 更改密码
+     * @param password
+     * @param newPassword
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    @RequestMapping("/changePwd")
     public Map<String, String> changePwd(String password, String newPassword) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
 
-        String username = hostHolderZF.getUser().getUsername();
+        String username = hostHolder.getUser().getUsername();
         map = userService.changePwd(username, password, newPassword);
 
         return map;
