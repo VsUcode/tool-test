@@ -1,7 +1,7 @@
 package com.keyboardman.tool.zhaofeng.configuration;
 
-import com.keyboardman.tool.zhaofeng.interceptor.LoginRequiredInterceptor;
-import com.keyboardman.tool.zhaofeng.interceptor.PassportInterceptor;
+import com.keyboardman.tool.zhaofeng.interceptor.LoginRequiredInterceptorZf;
+import com.keyboardman.tool.zhaofeng.interceptor.PassportInterceptorZf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
@@ -9,19 +9,19 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Component
-public class Configuration implements WebMvcConfigurer {
+public class ConfigurationZF implements WebMvcConfigurer {
 
     @Autowired
-    private PassportInterceptor passportInterceptor;
+    private PassportInterceptorZf passportInterceptorZf;
 
     @Autowired
-    LoginRequiredInterceptor loginRequiredInterceptor;
+    LoginRequiredInterceptorZf loginRequiredInterceptorZf;
 
     @Override
     public void addInterceptors(InterceptorRegistry interceptorRegistry){
 
-        interceptorRegistry.addInterceptor(passportInterceptor);
-        InterceptorRegistration loginRegistry =interceptorRegistry.addInterceptor(loginRequiredInterceptor);
+        interceptorRegistry.addInterceptor(passportInterceptorZf);
+        InterceptorRegistration loginRegistry =interceptorRegistry.addInterceptor(loginRequiredInterceptorZf);
 
         loginRegistry.addPathPatterns("/healthPage");
         // 排除路径

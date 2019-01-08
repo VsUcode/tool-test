@@ -22,10 +22,10 @@ public class PassportInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        User user = (User) request.getSession().getAttribute("userinfo");
-        if (user != null){
-            hostHolder.setUsers(user);
-        }
+//        User user = (User) request.getSession().getAttribute("userinfo");
+//        if (user != null){
+//            hostHolder.setUsers(user);
+//        }
 
         return true;
 

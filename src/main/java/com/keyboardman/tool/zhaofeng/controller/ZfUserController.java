@@ -1,7 +1,7 @@
 package com.keyboardman.tool.zhaofeng.controller;
 
 import com.keyboardman.tool.zhaofeng.model.HostHolderZF;
-import com.keyboardman.tool.zhaofeng.service.UserService;
+import com.keyboardman.tool.zhaofeng.service.ZfUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,37 +13,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class UserController {
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+public class ZfUserController {
+    private static final Logger logger = LoggerFactory.getLogger(ZfUserController.class);
 
 
     @Autowired
     private HostHolderZF hostHolderZF;
 
     @Autowired
-    private UserService userService;
+    private ZfUserService zfUserService;
 
     /**
      * 注销用户
      * @param password
      * @return
      */
-    @RequestMapping("/WxDeleteUser")
+    @RequestMapping("/ZfWxDeleteUser")
     public Map<String, String> deleteUser(String password) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
 
         String username = hostHolderZF.getUser().getUsername();
-        map = userService.deleteUser(username, password);
+        map = zfUserService.deleteUser(username, password);
 
         return map;
     }
 
-    @RequestMapping("/WxChangePwd")
-    public Map<String, String> changePwd(String password, String newPassword) throws UnsupportedEncodingException {
+    @RequestMapping("/ZfWxChangePwd")
+    public Map<String, String> changePwd(String username, String password, String newPassword) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
 
-        String username = hostHolderZF.getUser().getUsername();
-        map = userService.changePwd(username, password, newPassword);
+//        String username = hostHolderZF.getUser().getUsername();
+        map = zfUserService.changePwd(username, password, newPassword);
 
         return map;
     }

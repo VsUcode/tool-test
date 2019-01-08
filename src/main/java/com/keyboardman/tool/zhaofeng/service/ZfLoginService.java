@@ -2,7 +2,7 @@ package com.keyboardman.tool.zhaofeng.service;
 
 import com.keyboardman.tool.root.utils.RootConstant;
 import com.keyboardman.tool.root.utils.RootUtils;
-import com.keyboardman.tool.zhaofeng.dao.LoginDao;
+import com.keyboardman.tool.zhaofeng.dao.ZfLoginDao;
 import com.keyboardman.tool.zhaofeng.model.UserZF;
 import com.keyboardman.tool.zhaofeng.utils.CommonZF;
 import com.keyboardman.tool.zhaofeng.utils.ZFUtil;
@@ -15,10 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class LoginService {
+public class ZfLoginService {
 
     @Autowired
-    private LoginDao loginDao;
+    private ZfLoginDao zfLoginDao;
 
     /**
      * 注册
@@ -37,7 +37,7 @@ public class LoginService {
             return map;
         }
 
-        UserZF isUser = loginDao.selectByName(user.getUsername(), RootConstant.STATUS_0);
+        UserZF isUser = zfLoginDao.selectByName(user.getUsername(), RootConstant.STATUS_0);
         if (isUser != null){
             map.put("msg", "用户名已被注册");
             return map;
@@ -51,7 +51,7 @@ public class LoginService {
         String passwordResult= null;
         passwordResult = RootUtils.MD5(password);
         user.setPassword(passwordResult);
-        int flag = loginDao.addUser(user);
+        int flag = zfLoginDao.addUser(user);
         //todo 默认为登录
         if (flag == 1){
             map.put("msg", "success");
@@ -72,7 +72,7 @@ public class LoginService {
             return map;
         }
 
-        UserZF userZF = loginDao.selectByName(user.getUsername(), RootConstant.STATUS_0);
+        UserZF userZF = zfLoginDao.selectByName(user.getUsername(), RootConstant.STATUS_0);
         if (userZF != null){
             String pwd = user.getPassword();
             pwd += CommonZF.MD5_SALT;
@@ -96,6 +96,6 @@ public class LoginService {
      * @return
      */
     public UserZF getUser(String username){
-        return loginDao.selectByName(username, RootConstant.STATUS_0);
+        return zfLoginDao.selectByName(username, RootConstant.STATUS_0);
     }
 }

@@ -3,7 +3,7 @@ package com.keyboardman.tool.zhaofeng.dao;
 import org.apache.ibatis.annotations.*;
 
 @Mapper
-public interface UserDao {
+public interface ZfUserDao {
 
     String TABLE_NAME = " zf_user ";
     String INSERT_FIELDS = " username, password, phone, power, status ";
