@@ -1,5 +1,6 @@
 package com.keyboardman.tool.zhaofeng.service;
 
+import com.keyboardman.tool.root.utils.CommonFather;
 import com.keyboardman.tool.root.utils.RootConstant;
 import com.keyboardman.tool.root.utils.RootUtils;
 import com.keyboardman.tool.zhaofeng.dao.ZfLoginDao;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class ZfUserService {
+public class ZfUserService extends CommonFather {
 
     @Autowired
     private ZfLoginDao zfLoginDao;
@@ -30,6 +31,8 @@ public class ZfUserService {
      */
     public Map<String, String> deleteUser(String username, String password) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
+        super.validateEmpty("username", username);
+        super.validateEmpty("password", password);
         UserZF userZF = zfLoginDao.selectByName(username, RootConstant.STATUS_0);
         if (userZF != null){
             String pwd = password;
@@ -56,6 +59,10 @@ public class ZfUserService {
      */
     public Map<String, String> changePwd(String username, String password, String newPassword) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
+        super.validateEmpty("username", username);
+        super.validateEmpty("password", password);
+        super.validateEmpty("newPassword", newPassword);
+
         UserZF userZF = zfLoginDao.selectByName(username, RootConstant.STATUS_0);
         if (userZF != null){
             String pwd = password;

@@ -29,10 +29,9 @@ public class ZfUserController {
      * @return
      */
     @RequestMapping("/ZfWxDeleteUser")
-    public Map<String, String> deleteUser(String password) throws UnsupportedEncodingException {
+    public Map<String, String> deleteUser(String username, String password) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
 
-        String username = hostHolderZF.getUser().getUsername();
         map = zfUserService.deleteUser(username, password);
 
         return map;
@@ -42,7 +41,6 @@ public class ZfUserController {
     public Map<String, String> changePwd(String username, String password, String newPassword) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
 
-//        String username = hostHolderZF.getUser().getUsername();
         map = zfUserService.changePwd(username, password, newPassword);
 
         return map;

@@ -28,12 +28,8 @@ public class HealthyController {
      * @return
      */
     @RequestMapping("/WxSelectHealthy")
-    public HealthZF selectHealthy(){
-        Map<String, String> map = new HashMap<>();
-
-        String username = hostHolderZF.getUser().getUsername();
+    public HealthZF selectHealthy(String username){
         HealthZF entity = healthyService.selectHealthy(username);
-
         return entity;
     }
 
@@ -58,10 +54,6 @@ public class HealthyController {
     @RequestMapping("/WxAddHealthy")
     public Map<String, String> addHealthy(HealthZF entity){
         Map<String, String> map = new HashMap<>();
-
-        String username = hostHolderZF.getUser().getUsername();
-        entity.setUsername(username);
-
         map = healthyService.addHealthy(entity);
 
         return map;
@@ -76,10 +68,6 @@ public class HealthyController {
     @RequestMapping("/WxUpdateHealthy")
     public Map<String, String> updateHealthy(HealthZF entity){
         Map<String, String> map = new HashMap<>();
-
-        String username = hostHolderZF.getUser().getUsername();
-        entity.setUsername(username);
-
         map = healthyService.updateHealthy(entity);
 
         return map;
@@ -92,10 +80,8 @@ public class HealthyController {
      * @return
      */
     @RequestMapping("/WxDeleteHealthy")
-    public Map<String, String> deleteHealthy(){
+    public Map<String, String> deleteHealthy(String username){
         Map<String, String> map = new HashMap<>();
-
-        String username = hostHolderZF.getUser().getUsername();
         map = healthyService.deleteHealthy(username);
 
         return map;

@@ -1,5 +1,6 @@
 package com.keyboardman.tool.zhaofeng.service;
 
+import com.keyboardman.tool.root.utils.CommonFather;
 import com.keyboardman.tool.root.utils.RootConstant;
 import com.keyboardman.tool.root.utils.RootUtils;
 import com.keyboardman.tool.zhaofeng.dao.ZfLoginDao;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class ZfLoginService {
+public class ZfLoginService extends CommonFather {
 
     @Autowired
     private ZfLoginDao zfLoginDao;
@@ -28,14 +29,9 @@ public class ZfLoginService {
     public Map<String, String> register(UserZF user) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
 
-        map = ZFUtil.identifyUser(user);
-        if (!map.get("msg").equals("success")){
-            return map;
-        }
-        if (StringUtils.isEmpty(user.getPhone())){
-            map.put("msg", "联系电话不能为空");
-            return map;
-        }
+        super.validateEmpty("username", user.getUsername());
+        super.validateEmpty("password", user.getPassword());
+        super.validateEmpty("phone", user.getPhone());
 
         UserZF isUser = zfLoginDao.selectByName(user.getUsername(), RootConstant.STATUS_0);
         if (isUser != null){
@@ -67,10 +63,8 @@ public class ZfLoginService {
     public Map<String, String> login(UserZF user) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
 
-        map = ZFUtil.identifyUser(user);
-        if (!map.get("msg").equals("success")){
-            return map;
-        }
+        super.validateEmpty("username", user.getUsername());
+        super.validateEmpty("password", user.getPassword());
 
         UserZF userZF = zfLoginDao.selectByName(user.getUsername(), RootConstant.STATUS_0);
         if (userZF != null){
@@ -96,6 +90,10 @@ public class ZfLoginService {
      * @return
      */
     public UserZF getUser(String username){
-        return zfLoginDao.selectByName(username, RootConstant.STATUS_0);
+        super.validateEmpty("username", username);
+
+        UserZF userZF = zfLoginDao.selectByName(username, RootConstant.STATUS_0);
+        userZF.setPassword("");
+        return userZF;
     }
 }

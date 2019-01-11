@@ -1,5 +1,6 @@
 package com.keyboardman.tool.zhaofeng.service;
 
+import com.keyboardman.tool.root.utils.CommonFather;
 import com.keyboardman.tool.root.utils.RootConstant;
 import com.keyboardman.tool.zhaofeng.dao.HealthyDao;
 import com.keyboardman.tool.zhaofeng.model.HealthZF;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class HealthyService {
+public class HealthyService extends CommonFather {
 
     @Autowired
     private HealthyDao healthyDao;
@@ -22,7 +23,12 @@ public class HealthyService {
      */
     public Map<String, String> addHealthy(HealthZF entity) {
         Map<String, String> map = new HashMap<>();
-        // todo 非空判断
+        super.validateEmpty("username", entity.getUsername());
+        super.validateEmpty("inheritedDisease", entity.getInheritedDisease());
+        super.validateEmpty("operation", entity.getOperation());
+        super.validateEmpty("pestilence", entity.getPestilence());
+        super.validateEmpty("apriority", entity.getApriority());
+        super.validateEmpty("health", entity.getHealthy());
 
         HealthZF healthZF = healthyDao.selectByUsername(entity.getUsername(), RootConstant.STATUS_0);
         if (healthZF != null){
@@ -44,7 +50,12 @@ public class HealthyService {
      */
     public Map<String, String> updateHealthy(HealthZF entity) {
         Map<String, String> map = new HashMap<>();
-        // todo 非空判断
+        super.validateEmpty("username", entity.getUsername());
+        super.validateEmpty("inheritedDisease", entity.getInheritedDisease());
+        super.validateEmpty("operation", entity.getOperation());
+        super.validateEmpty("pestilence", entity.getPestilence());
+        super.validateEmpty("apriority", entity.getApriority());
+        super.validateEmpty("health", entity.getHealthy());
 
         HealthZF healthZF = healthyDao.selectByUsername(entity.getUsername(), RootConstant.STATUS_0);
         if (healthZF != null){
@@ -65,7 +76,8 @@ public class HealthyService {
      */
     public Map<String, String> deleteHealthy(String username) {
         Map<String, String> map = new HashMap<>();
-        // todo 非空判断
+        super.validateEmpty("username", username);
+
         HealthZF healthZF = healthyDao.selectByUsername(username, RootConstant.STATUS_0);
         int flag = healthyDao.deleteByid(healthZF.getId(), RootConstant.STATUS_1);
         if (flag == 1){
@@ -80,7 +92,7 @@ public class HealthyService {
      * @return
      */
     public HealthZF selectHealthy(String username) {
-        // todo 非空判断
+        super.validateEmpty("username", username);
 
         HealthZF healthZF = healthyDao.selectByUsername(username, RootConstant.STATUS_0);
 
@@ -93,7 +105,7 @@ public class HealthyService {
      * @return
      */
     public HealthZF selectHealthyById(String id) {
-        // todo 非空判断
+        super.validateEmpty("id", id);
 
         HealthZF healthZF = healthyDao.selectById(id);
 

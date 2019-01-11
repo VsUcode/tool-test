@@ -30,10 +30,8 @@ public class PrebookController {
      * @return
      */
     @RequestMapping("/WxSelectBook")
-    public PrebookZF selectHealthy(){
+    public PrebookZF selectHealthy(String username){
         Map<String, String> map = new HashMap<>();
-
-        String username = hostHolderZF.getUser().getUsername();
         PrebookZF entity = prebookService.selectBook(username);
 
         return entity;
@@ -48,9 +46,6 @@ public class PrebookController {
     public Map<String, String> addBook(PrebookZF entity){
         Map<String, String> map = new HashMap<>();
 
-        String username = hostHolderZF.getUser().getUsername();
-        entity.setUsername(username);
-
         map = prebookService.addBook(entity);
 
         return map;
@@ -62,10 +57,9 @@ public class PrebookController {
      * @return
      */
     @RequestMapping("/WxDeleteBook")
-    public Map<String, String> deleteBook(){
+    public Map<String, String> deleteBook(String username){
         Map<String, String> map = new HashMap<>();
 
-        String username = hostHolderZF.getUser().getUsername();
         map = prebookService.deleteBook(username);
 
         return map;

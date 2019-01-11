@@ -3,6 +3,7 @@ package com.keyboardman.tool.root.service;
 import com.keyboardman.tool.root.dao.LoginDao;
 import com.keyboardman.tool.root.dao.UserDao;
 import com.keyboardman.tool.root.model.User;
+import com.keyboardman.tool.root.utils.CommonFather;
 import com.keyboardman.tool.root.utils.RootConstant;
 import com.keyboardman.tool.root.utils.RootUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class UserService {
+public class UserService extends CommonFather {
 
     @Autowired
     private LoginDao loginDao;
@@ -29,10 +30,12 @@ public class UserService {
      */
     public Map<String, String> deleteUser(String username, String password) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
+        super.validateEmpty("username", username);
+        super.validateEmpty("password", password);
         User user = loginDao.selectByName(username, RootConstant.STATUS_0);
         if (user != null){
             String pwd = password;
-            pwd += RootConstant.ROOT_ZF_USER_POWER;
+            pwd += RootConstant.ROOT_USER_POWER;
             pwd = RootUtils.MD5(pwd);
 
             if (pwd.equals(user.getPassword())){
@@ -55,16 +58,19 @@ public class UserService {
      */
     public Map<String, String> changePwd(String username, String password, String newPassword) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
+        super.validateEmpty("username", username);
+        super.validateEmpty("password", password);
+        super.validateEmpty("newPassword", newPassword);
         User user = loginDao.selectByName(username, RootConstant.STATUS_0);
         if (user != null){
             String pwd = password;
-            pwd += RootConstant.ROOT_ZF_USER_POWER;
+            pwd += RootConstant.ROOT_USER_POWER;
             pwd = RootUtils.MD5(pwd);
 
             if (pwd.equals(user.getPassword())){
                 // todo sql验证
 
-                String newPwd = newPassword + RootConstant.ROOT_ZF_USER_POWER;
+                String newPwd = newPassword + RootConstant.ROOT_USER_POWER;
                 newPwd = RootUtils.MD5(newPwd);
 
                 userDao.updatePassword(user.getId(), newPwd);

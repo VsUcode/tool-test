@@ -1,5 +1,6 @@
 package com.keyboardman.tool.zhaofeng.service;
 
+import com.keyboardman.tool.root.utils.CommonFather;
 import com.keyboardman.tool.root.utils.RootConstant;
 import com.keyboardman.tool.zhaofeng.dao.PrebookDao;
 import com.keyboardman.tool.zhaofeng.model.PrebookZF;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class PrebookService {
+public class PrebookService extends CommonFather {
 
     @Autowired
     private PrebookDao prebookDao;
@@ -24,7 +25,7 @@ public class PrebookService {
      * @return
      */
     public PrebookZF selectBook(String username) {
-        // todo 非空判断
+        super.validateEmpty("username", username);
 
         PrebookZF prebookZF = prebookDao.selectByUsername(username, RootConstant.STATUS_0);
 
@@ -38,7 +39,10 @@ public class PrebookService {
      */
     public Map<String, String> addBook(PrebookZF entity) {
         Map<String, String> map = new HashMap<>();
-        // todo 非空判断
+        super.validateEmpty("username", entity.getUsername());
+        super.validateEmpty("type", entity.getType());
+        super.validateEmpty("starttime", entity.getStarttime());
+        super.validateEmpty("endtime", entity.getEndtime());
 
         // todo 时间段排查 提高交互性
 
@@ -62,7 +66,8 @@ public class PrebookService {
      */
     public Map<String, String> deleteBook(String username) {
         Map<String, String> map = new HashMap<>();
-        // todo 非空判断
+        super.validateEmpty("username", username);
+
         PrebookZF prebookZF = prebookDao.selectByUsername(username, RootConstant.STATUS_0);
         int flag = prebookDao.deleteByid(prebookZF.getId(), RootConstant.STATUS_1);
         if (flag == 1){
@@ -77,10 +82,9 @@ public class PrebookService {
      * @return
      */
     public List<PrebookZF> selectBookList(String type) {
-        //todo 非空校验
+        super.validateEmpty("type", type);
 
         Date now = new Date();
-
         List<PrebookZF> list = prebookDao.selectBookList(type, RootConstant.STATUS_0, now);
 
         return list;

@@ -2,6 +2,7 @@ package com.keyboardman.tool.root.service;
 
 import com.keyboardman.tool.root.dao.LoginDao;
 import com.keyboardman.tool.root.model.User;
+import com.keyboardman.tool.root.utils.CommonFather;
 import com.keyboardman.tool.root.utils.RootConstant;
 import com.keyboardman.tool.root.utils.RootUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class LoginService {
+public class LoginService extends CommonFather {
 
     @Autowired
     private LoginDao loginDao;
@@ -24,16 +25,8 @@ public class LoginService {
      */
     public Map<String, String> register(User user) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
-
-        // TODO 非空验证
-//        map = ZFUtil.identifyUser(user);
-        if (!map.get("msg").equals("success")){
-            return map;
-        }
-//        if (StringUtils.isEmpty(user.getPhone())){
-//            map.put("msg", "联系电话不能为空");
-//            return map;
-//        }
+        super.validateEmpty("username", user.getUsername());
+        super.validateEmpty("password", user.getPassword());
 
         User isUser = loginDao.selectByName(user.getUsername(), RootConstant.STATUS_0);
         if (isUser != null){
@@ -41,11 +34,11 @@ public class LoginService {
             return map;
         }
 
-        user.setPower(RootConstant.ROOT_ZF_USER_POWER);
+        user.setPower(RootConstant.ROOT_USER_POWER);
         user.setStatus(RootConstant.STATUS_0);
         //密码强度
         String password = user.getPassword();
-        password += RootConstant.ROOT_ZF_USER_POWER;
+        password += RootConstant.ROOT_USER_POWER;
         String passwordResult= null;
         passwordResult = RootUtils.MD5(password);
         user.setPassword(passwordResult);
@@ -64,12 +57,13 @@ public class LoginService {
     public Map<String, String> login(User user) throws UnsupportedEncodingException {
         Map<String, String> map = new HashMap<>();
 
-        // TODO 非空验证
+        super.validateEmpty("username", user.getUsername());
+        super.validateEmpty("password", user.getPassword());
 
         User isUser = loginDao.selectByName(user.getUsername(), RootConstant.STATUS_0);
         if (isUser != null){
             String pwd = user.getPassword();
-            pwd += RootConstant.ROOT_ZF_USER_POWER;
+            pwd += RootConstant.ROOT_USER_POWER;
             pwd = RootUtils.MD5(pwd);
 
             if (pwd.equals(isUser.getPassword())){
@@ -90,6 +84,9 @@ public class LoginService {
      * @return
      */
     public User getUser(String username){
-        return loginDao.selectByName(username,RootConstant.STATUS_0);
+        super.validateEmpty("username", username);
+        User user = loginDao.selectByName(username,RootConstant.STATUS_0);
+        user.setPassword("");
+        return user;
     }
 }
