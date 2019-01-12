@@ -14,6 +14,7 @@ public interface ZjsCarDao {
     String SELECT_FIELDS = " id, " + INSERT_FIELDS;
     String SELECT_CHECK_FIELDS = " id, booker, booker_phone, starttime, endtime, status";
     String SELECT_BOOKID_FIELDS = " id, car_user, user_phone, starttime, endtime ";
+    String SELECT_HANDLE_FIELDS = " id, car_user, user_phone, starttime, endtime, status";
 
 
     @Select({"select ", SELECT_CHECK_FIELDS, " from ", TABLE_NAME, " where status in (0,1) and starttime between #{starttime} and #{endtime} order by starttime"})
@@ -29,13 +30,13 @@ public interface ZjsCarDao {
     @Update({"update " + TABLE_NAME + " set feedback=#{feedback} where bookid=#{bookid}"})
     int addBookFeedback(@Param("bookid") String bookid, @Param("feedback") String feedback);
 
-    @Select({"select ", SELECT_CHECK_FIELDS, " from ", TABLE_NAME, " where status=#{status} and starttime>= #{starttime} order by starttime"})
+    @Select({"select ", SELECT_HANDLE_FIELDS, " from ", TABLE_NAME, " where status=#{status} and starttime>= #{starttime} order by starttime"})
     List<CarZJS> selectHandleList(@Param("starttime") Date starttime, @Param("status") int status);
 
-    @Select({"select ", SELECT_CHECK_FIELDS, " from ", TABLE_NAME, " where status=#{status}  order by starttime desc"})
+    @Select({"select ", SELECT_HANDLE_FIELDS, " from ", TABLE_NAME, " where status=#{status}  order by starttime desc"})
     List<CarZJS> selectSuccessList(int status);
 
-    @Select({"select ", SELECT_CHECK_FIELDS, " from ", TABLE_NAME, " where username=#{username}  order by starttime desc"})
+    @Select({"select ", SELECT_HANDLE_FIELDS, " from ", TABLE_NAME, " where username=#{username}  order by starttime desc"})
     List<CarZJS> selectPersonalList(String username);
 
     @Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where id=#{id}"})

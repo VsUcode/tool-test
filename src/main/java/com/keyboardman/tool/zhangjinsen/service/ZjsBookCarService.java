@@ -82,6 +82,9 @@ public class ZjsBookCarService extends CommonFather {
         CarZJS carZJS = selectCarByBookid(bookid);
         if (carZJS != null){
             result = zjsCarDao.addBookFeedback(bookid, feedback);
+        }else{
+            map.put("msg", "订单不存在");
+            return map;
         }
         if (result == 1){
             map.put("msg", "success");

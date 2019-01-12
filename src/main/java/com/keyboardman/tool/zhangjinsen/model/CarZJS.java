@@ -1,5 +1,8 @@
 package com.keyboardman.tool.zhangjinsen.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class CarZJS {
@@ -8,7 +11,11 @@ public class CarZJS {
     private String bookerPhone;
     private String carUser;
     private String userPhone;
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:SS")
     private Date starttime;
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:SS")
     private Date endtime;
     private String startSite;
     private String endSite;

@@ -28,13 +28,13 @@ public class ZjsCarCheckController {
      * @throws ParseException
      */
     @RequestMapping("/zjsWxCheck")
-    public List<CarZJS> getCarCheckList(Date time) throws ParseException {
+    public List<CarZJS> getCarCheckList(String time) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if (time == null){
-            String strTime = sdf.format(new Date());
-            time =  sdf.parse(strTime);
+            time = sdf.format(new Date());
         }
-        List<CarZJS> carList = zjsCarCheckService.getCarListByTime(time);
+        Date strTime =  sdf.parse(time);
+        List<CarZJS> carList = zjsCarCheckService.getCarListByTime(strTime);
 
         return carList;
     }

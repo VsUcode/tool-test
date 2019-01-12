@@ -50,6 +50,7 @@ public class ZjsBookCarController extends CommonFather {
      */
     @RequestMapping("/zjsWxCheckTime")
     public Map<String, String> checktime(Date starttime, Date endtime) throws ParseException {
+
         Map<String, String> map = zjsBookCarService.checktime(starttime, endtime);
         return map;
     }
