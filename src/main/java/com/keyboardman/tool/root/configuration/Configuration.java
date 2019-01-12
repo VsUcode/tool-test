@@ -25,6 +25,7 @@ public class Configuration implements WebMvcConfigurer {
 //
 ////        loginRegistry.addPathPatterns("/healthPage");
 //        // 排除路径
+
 //        loginRegistry.excludePathPatterns("/");
 //        loginRegistry.excludePathPatterns("/loginPage");
 //        loginRegistry.excludePathPatterns("/loginout");

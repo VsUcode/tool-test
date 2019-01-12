@@ -7,11 +7,13 @@ import com.keyboardman.tool.zhangjinsen.dao.ZjsLoginDao;
 import com.keyboardman.tool.zhangjinsen.model.UserZJS;
 import com.keyboardman.tool.zhangjinsen.utils.CommonZJS;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class ZjsLoginService extends CommonFather {
 
     @Autowired
