@@ -6,15 +6,13 @@ import com.keyboardman.tool.zhangjinsen.dao.ZjsCarDao;
 import com.keyboardman.tool.zhangjinsen.dao.ZjsLoginDao;
 import com.keyboardman.tool.zhangjinsen.model.CarZJS;
 import com.keyboardman.tool.zhangjinsen.model.UserZJS;
+import com.keyboardman.tool.zhangjinsen.utils.CommonZJS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ZjsBookCarService extends CommonFather {
@@ -42,7 +40,6 @@ public class ZjsBookCarService extends CommonFather {
         super.validateEmpty("endtime", car.getEndtime());
         super.validateEmpty("startSite", car.getStartSite());
         super.validateEmpty("endSite", car.getEndSite());
-        super.validateEmpty("remark", car.getRemark());
 
         Map<String, String> map = checktime(car.getStarttime(), car.getEndtime());
         if (!map.get("msg").equals("success")){
@@ -101,7 +98,22 @@ public class ZjsBookCarService extends CommonFather {
      */
     public CarZJS selectCarByBookid(String bookid) {
         super.validateEmpty("bookid", bookid);
-        CarZJS carZJS = zjsCarDao.selectCarByBookid(bookid);
+        CarZJS car = zjsCarDao.selectCarByBookid(bookid);
+
+        CarZJS carZJS = new CarZJS();
+        carZJS.setStatus(car.getStatus());
+        carZJS.setId(car.getId());
+        carZJS.setCarUser(car.getCarUser());
+        carZJS.setUserPhone(car.getUserPhone());
+
+        Calendar calendar = Calendar.getInstance();//日历对象
+        calendar.setTime(car.getStarttime());//设置当前日期
+        carZJS.setBooker(String.valueOf(calendar.get(Calendar.YEAR)) +"-"+ String.valueOf(calendar.get(Calendar.MONTH) + 1) +"-"+ calendar.get(Calendar.DATE));
+        carZJS.setStartSite(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) +":"+ calendar.get(Calendar.MINUTE));
+
+        calendar.setTime(car.getEndtime());//设置当前日期
+        carZJS.setEndSite(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) +":"+ calendar.get(Calendar.MINUTE));
+
         return carZJS;
     }
 
@@ -119,7 +131,9 @@ public class ZjsBookCarService extends CommonFather {
         }
         String strTime = sdf.format(time);
         newtime =  sdf.parse(strTime);
-        List<CarZJS> carList = zjsCarCheckService.getCarListByTime(newtime);
+        Date endtime = CommonZJS.addOneDay(time);
+        List<CarZJS> carList = zjsCarDao.selectCheckList(newtime, endtime);
+//        List<CarZJS> carList = zjsCarCheckService.getCarListByTime(newtime);
         for (CarZJS c : carList ){
             //当前时间大于开始时间 必然大于结束时间
             if (time.getTime() >= c.getStarttime().getTime() && time.getTime() <= c.getEndtime().getTime()){
@@ -156,8 +170,9 @@ public class ZjsBookCarService extends CommonFather {
         }
 
         String strTime = sdf.format(starttime);
-        newtime =  sdf.parse(strTime);
-        List<CarZJS> carList = zjsCarCheckService.getCarListByTime(newtime);
+        Date newStime =  sdf.parse(strTime);
+        Date newNtime = CommonZJS.addOneDay(newStime);
+        List<CarZJS> carList = zjsCarDao.selectCheckList(newStime, newNtime);
         for (CarZJS c : carList ){
             //当前开始时间小于开始时间 当前结束时间小于开始时间
             if (starttime.getTime() <= c.getStarttime().getTime() && endtime.getTime() >= c.getStarttime().getTime()){

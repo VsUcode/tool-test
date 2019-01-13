@@ -124,7 +124,6 @@ public class ZjsHandleCarService extends CommonFather {
     public Map<String, String> handleCarById(int id, int status, String spyj) {
         super.validateEmpty("id", id);
         super.validateEmpty("status", status);
-        super.validateEmpty("spyj", spyj);
         Map<String, String> map = new HashMap<>();
 
         CarZJS carZJS = zjsCarDao.selectCarById(id);
@@ -154,7 +153,7 @@ public class ZjsHandleCarService extends CommonFather {
         Map<String, String> map = new HashMap<>();
 
         CarZJS carZJS = zjsCarDao.selectCarById(id);
-        if (carZJS.getStatus() != 1){
+        if (carZJS.getStatus() != 1  && carZJS.getStatus() != 0){
             map.put("msg", "删除失败，已被他人删除");
             return map;
         }

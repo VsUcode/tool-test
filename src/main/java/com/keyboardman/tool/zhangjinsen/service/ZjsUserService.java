@@ -86,7 +86,7 @@ public class ZjsUserService extends CommonFather {
                 }
             }
         }
-        map.put("msg", "密码不正确，注销失败");
+        map.put("msg", "密码不正确，更改失败");
         return map;
     }
 
