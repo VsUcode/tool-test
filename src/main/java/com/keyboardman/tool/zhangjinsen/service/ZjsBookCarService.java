@@ -124,6 +124,11 @@ public class ZjsBookCarService extends CommonFather {
      */
     public Map<String, String> checkStarttime(Date time) throws ParseException {
         Map<String, String> map = new HashMap<>();
+
+        if (time.getTime() <= new Date().getTime()){
+            map.put("msg", "开始时间不能为过去时间");
+            return map;
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date newtime = null;
         if (time == null){
