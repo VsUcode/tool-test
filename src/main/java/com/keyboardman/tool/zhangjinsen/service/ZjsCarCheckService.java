@@ -34,7 +34,13 @@ public class ZjsCarCheckService extends CommonFather {
 //        rightNow.add(Calendar.DAY_OF_YEAR,1);//日期加10天
 //        Date endtime = rightNow.getTime();
         Date endtime = CommonZJS.addOneDay(time);
+
         List<CarZJS> list = zjsCarDao.selectCheckList(starttime, endtime);
+//        跨天的
+        List<CarZJS> list1 = zjsCarDao.selectCheckList1(time);
+        list.addAll(list1);
+        Calendar calendar = Calendar.getInstance();//日历对象
+        Calendar calendarE = Calendar.getInstance();//日历对象
         for (CarZJS car : list){
 
             CarZJS c = new CarZJS();
@@ -42,13 +48,12 @@ public class ZjsCarCheckService extends CommonFather {
             c.setBooker(car.getBooker());
             c.setBookerPhone(car.getBookerPhone());
 
-            Calendar calendar = Calendar.getInstance();//日历对象
+            calendarE.setTime(car.getEndtime());//设置当前日期
             calendar.setTime(car.getStarttime());//设置当前日期
-            c.setCarUser(String.valueOf(calendar.get(Calendar.YEAR)) +"-"+ String.valueOf(calendar.get(Calendar.MONTH) + 1) +"-"+ calendar.get(Calendar.DATE));
+            c.setCarUser(String.valueOf(calendar.get(Calendar.YEAR)) +"/"+ String.valueOf(calendar.get(Calendar.MONTH) + 1) +"/"+ calendar.get(Calendar.DATE)+
+                    "--"+String.valueOf(calendarE.get(Calendar.YEAR)) +"/"+ String.valueOf(calendarE.get(Calendar.MONTH) + 1) +"/"+ calendarE.get(Calendar.DATE));
             c.setStartSite(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) +":"+ calendar.get(Calendar.MINUTE));
-
-            calendar.setTime(car.getEndtime());//设置当前日期
-            c.setEndSite(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) +":"+ calendar.get(Calendar.MINUTE));
+            c.setEndSite(String.valueOf(calendarE.get(Calendar.HOUR_OF_DAY)) +":"+ calendarE.get(Calendar.MINUTE));
             data.add(c);
         }
         return data;

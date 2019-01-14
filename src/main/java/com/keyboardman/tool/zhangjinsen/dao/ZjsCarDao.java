@@ -36,8 +36,8 @@ public interface ZjsCarDao {
     @Select({"select ", SELECT_HANDLE_FIELDS, " from ", TABLE_NAME, " where status=#{status}  order by starttime desc"})
     List<CarZJS> selectSuccessList(int status);
 
-    @Select({"select ", SELECT_HANDLE_FIELDS, " from ", TABLE_NAME, " where booker=#{username}  order by starttime desc"})
-    List<CarZJS> selectPersonalList(String username);
+    @Select({"select ", SELECT_HANDLE_FIELDS, " from ", TABLE_NAME, " where booker=#{username} and starttime>= #{starttime}  order by starttime desc"})
+    List<CarZJS> selectPersonalList(@Param("username") String username, @Param("starttime") Date starttime);
 
     @Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where id=#{id}"})
     CarZJS selectCarById(int id);
@@ -47,4 +47,12 @@ public interface ZjsCarDao {
 
     @Update({"update " + TABLE_NAME + " set status=#{status} where id=#{id}"})
     int deleteCar(@Param("id") int id, @Param("status") int status);
+
+    /**
+     * 处理跨天的情况
+     * @param starttime
+     * @return
+     */
+    @Select({"select ", SELECT_CHECK_FIELDS, " from ", TABLE_NAME, " where status in (0,1) and #{starttime} between starttime and endtime order by starttime"})
+    List<CarZJS> selectCheckList1(Date starttime);
 }

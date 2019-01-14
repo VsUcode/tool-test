@@ -107,12 +107,14 @@ public class ZjsBookCarService extends CommonFather {
         carZJS.setUserPhone(car.getUserPhone());
 
         Calendar calendar = Calendar.getInstance();//日历对象
+        Calendar calendarE = Calendar.getInstance();//日历对象
+        calendarE.setTime(car.getEndtime());//设置当前日期
         calendar.setTime(car.getStarttime());//设置当前日期
-        carZJS.setBooker(String.valueOf(calendar.get(Calendar.YEAR)) +"-"+ String.valueOf(calendar.get(Calendar.MONTH) + 1) +"-"+ calendar.get(Calendar.DATE));
+        carZJS.setBooker(String.valueOf(calendar.get(Calendar.YEAR)) +"/"+ String.valueOf(calendar.get(Calendar.MONTH) + 1) +"/"+ calendar.get(Calendar.DATE)+
+                "--"+String.valueOf(calendarE.get(Calendar.YEAR)) +"/"+ String.valueOf(calendarE.get(Calendar.MONTH) + 1) +"/"+ calendarE.get(Calendar.DATE));
         carZJS.setStartSite(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) +":"+ calendar.get(Calendar.MINUTE));
 
-        calendar.setTime(car.getEndtime());//设置当前日期
-        carZJS.setEndSite(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) +":"+ calendar.get(Calendar.MINUTE));
+        carZJS.setEndSite(String.valueOf(calendarE.get(Calendar.HOUR_OF_DAY)) +":"+ calendarE.get(Calendar.MINUTE));
 
         return carZJS;
     }
@@ -138,7 +140,12 @@ public class ZjsBookCarService extends CommonFather {
         newtime =  sdf.parse(strTime);
         Date endtime = CommonZJS.addOneDay(time);
         List<CarZJS> carList = zjsCarDao.selectCheckList(newtime, endtime);
-//        List<CarZJS> carList = zjsCarCheckService.getCarListByTime(newtime);
+        //跨天的
+        List<CarZJS> list = zjsCarDao.selectCheckList1(time);
+        if (list.size() != 0){
+            map.put("msg", "当前开始时间不可用");
+            return map;
+        }
         for (CarZJS c : carList ){
             //当前时间大于开始时间 必然大于结束时间
             if (time.getTime() >= c.getStarttime().getTime() && time.getTime() <= c.getEndtime().getTime()){
@@ -176,7 +183,7 @@ public class ZjsBookCarService extends CommonFather {
 
         String strTime = sdf.format(starttime);
         Date newStime =  sdf.parse(strTime);
-        Date newNtime = CommonZJS.addOneDay(newStime);
+        Date newNtime = CommonZJS.addOneDay(sdf.parse(sdf.format(endtime)));
         List<CarZJS> carList = zjsCarDao.selectCheckList(newStime, newNtime);
         for (CarZJS c : carList ){
             //当前开始时间小于开始时间 当前结束时间小于开始时间

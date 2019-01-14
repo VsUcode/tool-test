@@ -36,7 +36,8 @@ public class ZjsHandleCarController {
      */
     @RequestMapping("/zjsWxSuccessPage")
     public List<CarZJS> getSuccessList(){
-        List<CarZJS> data = zjsHandleCarService.getSuccessList();
+        Date time = new Date();
+        List<CarZJS> data = zjsHandleCarService.getSuccessList(time);
         return data;
     }
 

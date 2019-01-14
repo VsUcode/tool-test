@@ -24,6 +24,8 @@ public class ZjsHandleCarService extends CommonFather {
         List<CarZJS> list = zjsCarDao.selectHandleList(time, RootConstant.STATUS_1);
         List<CarZJS> data = new ArrayList<>();
 
+        Calendar calendar = Calendar.getInstance();//日历对象
+        Calendar calendarE = Calendar.getInstance();//日历对象
         for (CarZJS car : list){
 
             CarZJS c = new CarZJS();
@@ -32,13 +34,13 @@ public class ZjsHandleCarService extends CommonFather {
             c.setCarUser(car.getCarUser());
             c.setUserPhone(car.getUserPhone());
 
-            Calendar calendar = Calendar.getInstance();//日历对象
+            calendarE.setTime(car.getEndtime());//设置当前日期
             calendar.setTime(car.getStarttime());//设置当前日期
-            c.setBooker(String.valueOf(calendar.get(Calendar.YEAR)) +"-"+ String.valueOf(calendar.get(Calendar.MONTH) + 1) +"-"+ calendar.get(Calendar.DATE));
+            c.setBooker(String.valueOf(calendar.get(Calendar.YEAR)) +"/"+ String.valueOf(calendar.get(Calendar.MONTH) + 1) +"/"+ calendar.get(Calendar.DATE)+
+                    "--"+String.valueOf(calendarE.get(Calendar.YEAR)) +"/"+ String.valueOf(calendarE.get(Calendar.MONTH) + 1) +"/"+ calendarE.get(Calendar.DATE));
             c.setStartSite(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) +":"+ calendar.get(Calendar.MINUTE));
 
-            calendar.setTime(car.getEndtime());//设置当前日期
-            c.setEndSite(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) +":"+ calendar.get(Calendar.MINUTE));
+            c.setEndSite(String.valueOf(calendarE.get(Calendar.HOUR_OF_DAY)) +":"+ calendarE.get(Calendar.MINUTE));
             data.add(c);
         }
         return data;
@@ -48,10 +50,12 @@ public class ZjsHandleCarService extends CommonFather {
      * 成功
      * @return
      */
-    public List<CarZJS> getSuccessList() {
+    public List<CarZJS> getSuccessList(Date time) {
         List<CarZJS> data = new ArrayList<>();
-        List<CarZJS> list = zjsCarDao.selectSuccessList(RootConstant.STATUS_0);
+        List<CarZJS> list = zjsCarDao.selectHandleList(time, RootConstant.STATUS_0);
 
+        Calendar calendar = Calendar.getInstance();//日历对象
+        Calendar calendarE = Calendar.getInstance();//日历对象
         for (CarZJS car : list){
 
             CarZJS c = new CarZJS();
@@ -60,13 +64,13 @@ public class ZjsHandleCarService extends CommonFather {
             c.setCarUser(car.getCarUser());
             c.setUserPhone(car.getUserPhone());
 
-            Calendar calendar = Calendar.getInstance();//日历对象
+            calendarE.setTime(car.getEndtime());//设置当前日期
             calendar.setTime(car.getStarttime());//设置当前日期
-            c.setBooker(String.valueOf(calendar.get(Calendar.YEAR)) +"-"+ String.valueOf(calendar.get(Calendar.MONTH) + 1) +"-"+ calendar.get(Calendar.DATE));
+            c.setBooker(String.valueOf(calendar.get(Calendar.YEAR)) +"/"+ String.valueOf(calendar.get(Calendar.MONTH) + 1) +"/"+ calendar.get(Calendar.DATE)+
+                    "--"+String.valueOf(calendarE.get(Calendar.YEAR)) +"/"+ String.valueOf(calendarE.get(Calendar.MONTH) + 1) +"/"+ calendarE.get(Calendar.DATE));
             c.setStartSite(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) +":"+ calendar.get(Calendar.MINUTE));
 
-            calendar.setTime(car.getEndtime());//设置当前日期
-            c.setEndSite(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) +":"+ calendar.get(Calendar.MINUTE));
+            c.setEndSite(String.valueOf(calendarE.get(Calendar.HOUR_OF_DAY)) +":"+ calendarE.get(Calendar.MINUTE));
             data.add(c);
         }
         return data;
@@ -79,10 +83,13 @@ public class ZjsHandleCarService extends CommonFather {
      */
     public List<CarZJS> getPersonalList(String username) {
         super.validateEmpty("username", username);
-        List<CarZJS> list = zjsCarDao.selectPersonalList(username);
+        Date time = new Date();
+        List<CarZJS> list = zjsCarDao.selectPersonalList(username, time);
 
         List<CarZJS> data = new ArrayList<>();
 
+        Calendar calendar = Calendar.getInstance();//日历对象
+        Calendar calendarE = Calendar.getInstance();//日历对象
         for (CarZJS car : list){
 
             CarZJS c = new CarZJS();
@@ -91,13 +98,14 @@ public class ZjsHandleCarService extends CommonFather {
             c.setCarUser(car.getCarUser());
             c.setUserPhone(car.getUserPhone());
 
-            Calendar calendar = Calendar.getInstance();//日历对象
+            calendarE.setTime(car.getEndtime());//设置当前日期
             calendar.setTime(car.getStarttime());//设置当前日期
-            c.setBooker(String.valueOf(calendar.get(Calendar.YEAR)) +"-"+ String.valueOf(calendar.get(Calendar.MONTH) + 1) +"-"+ calendar.get(Calendar.DATE));
+
+            c.setBooker(String.valueOf(calendar.get(Calendar.YEAR)) +"/"+ String.valueOf(calendar.get(Calendar.MONTH) + 1) +"/"+ calendar.get(Calendar.DATE)+
+                    "--"+String.valueOf(calendarE.get(Calendar.YEAR)) +"/"+ String.valueOf(calendarE.get(Calendar.MONTH) + 1) +"/"+ calendarE.get(Calendar.DATE));
             c.setStartSite(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) +":"+ calendar.get(Calendar.MINUTE));
 
-            calendar.setTime(car.getEndtime());//设置当前日期
-            c.setEndSite(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)) +":"+ calendar.get(Calendar.MINUTE));
+            c.setEndSite(String.valueOf(calendarE.get(Calendar.HOUR_OF_DAY)) +":"+ calendarE.get(Calendar.MINUTE));
             data.add(c);
         }
         return data;
