@@ -24,9 +24,9 @@ public class ZjsHandleCarController {
      * @return
      */
     @RequestMapping("/zjsWxHandlePage")
-    public List<CarZJS> getHandleList(){
+    public List<CarZJS> getHandleList(String username){
         Date time = new Date();
-        List<CarZJS> data = zjsHandleCarService.getHandleList(time);
+        List<CarZJS> data = zjsHandleCarService.getHandleList(username ,time);
         return data;
     }
 
@@ -35,9 +35,9 @@ public class ZjsHandleCarController {
      * @return
      */
     @RequestMapping("/zjsWxSuccessPage")
-    public List<CarZJS> getSuccessList(){
+    public List<CarZJS> getSuccessList(String username){
         Date time = new Date();
-        List<CarZJS> data = zjsHandleCarService.getSuccessList(time);
+        List<CarZJS> data = zjsHandleCarService.getSuccessList(username, time);
         return data;
     }
 

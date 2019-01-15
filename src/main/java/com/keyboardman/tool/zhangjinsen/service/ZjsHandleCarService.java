@@ -4,6 +4,7 @@ import com.keyboardman.tool.root.utils.CommonFather;
 import com.keyboardman.tool.root.utils.RootConstant;
 import com.keyboardman.tool.zhangjinsen.dao.ZjsCarDao;
 import com.keyboardman.tool.zhangjinsen.model.CarZJS;
+import com.keyboardman.tool.zhangjinsen.model.UserZJS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +16,21 @@ public class ZjsHandleCarService extends CommonFather {
     @Autowired
     private ZjsCarDao zjsCarDao;
 
+    @Autowired
+    private ZjsLoginService zjsLoginService;
+
     /**
      * 待审批
      * @return
      * @param time
      */
-    public List<CarZJS> getHandleList(Date time) {
+    public List<CarZJS> getHandleList(String username, Date time) {
+
+        UserZJS user = zjsLoginService.getUser(username);
+        if (user == null){
+            throw new RuntimeException("用户不存在");
+        }
+
         List<CarZJS> list = zjsCarDao.selectHandleList(time, RootConstant.STATUS_1);
         List<CarZJS> data = new ArrayList<>();
 
@@ -50,9 +60,14 @@ public class ZjsHandleCarService extends CommonFather {
      * 成功
      * @return
      */
-    public List<CarZJS> getSuccessList(Date time) {
+    public List<CarZJS> getSuccessList(String username, Date time) {
+        UserZJS user = zjsLoginService.getUser(username);
+        if (user == null){
+            throw new RuntimeException("用户不存在");
+        }
+
         List<CarZJS> data = new ArrayList<>();
-        List<CarZJS> list = zjsCarDao.selectHandleList(time, RootConstant.STATUS_0);
+        List<CarZJS> list = zjsCarDao.selectSuccessList(time, RootConstant.STATUS_0);
 
         Calendar calendar = Calendar.getInstance();//日历对象
         Calendar calendarE = Calendar.getInstance();//日历对象

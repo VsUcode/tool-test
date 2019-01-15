@@ -33,10 +33,10 @@ public interface ZjsCarDao {
     @Select({"select ", SELECT_HANDLE_FIELDS, " from ", TABLE_NAME, " where status=#{status} and starttime>= #{starttime} order by starttime"})
     List<CarZJS> selectHandleList(@Param("starttime") Date starttime, @Param("status") int status);
 
-    @Select({"select ", SELECT_HANDLE_FIELDS, " from ", TABLE_NAME, " where status=#{status}  order by starttime desc"})
-    List<CarZJS> selectSuccessList(int status);
+    @Select({"select ", SELECT_HANDLE_FIELDS, " from ", TABLE_NAME, " where status=#{status} and endtime>= #{starttime}  order by starttime desc"})
+    List<CarZJS> selectSuccessList(@Param("starttime") Date starttime, @Param("status") int status);
 
-    @Select({"select ", SELECT_HANDLE_FIELDS, " from ", TABLE_NAME, " where booker=#{username} and starttime>= #{starttime}  order by starttime desc"})
+    @Select({"select ", SELECT_HANDLE_FIELDS, " from ", TABLE_NAME, " where booker=#{username} and endtime>= #{starttime}  order by starttime desc"})
     List<CarZJS> selectPersonalList(@Param("username") String username, @Param("starttime") Date starttime);
 
     @Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where id=#{id}"})
