@@ -33,7 +33,6 @@ public class ZjsUserService extends CommonFather {
         Map<String, String> map = new HashMap<>();
         super.validateEmpty("username", username);
         super.validateEmpty("password", password);
-        int result = 0;
         UserZJS userZJS = zjsLoginDao.selectByName(username, RootConstant.STATUS_0);
         if (userZJS != null){
             String pwd = password;
@@ -41,15 +40,21 @@ public class ZjsUserService extends CommonFather {
             pwd = RootUtils.MD5(pwd);
 
             if (pwd.equals(userZJS.getPassword())){
-                // todo sql验证
-                result = zjsUserDao.deleteUser(userZJS.getId(), RootConstant.STATUS_1);
-                if (result == 1){
+                try{
+                    zjsUserDao.deleteUser(userZJS.getId(), RootConstant.STATUS_1);
                     map.put("msg", "success");
-                    return map;
+                }catch (Exception e){
+                    map.put("msg", "数据库错误");
+                    e.printStackTrace();
                 }
+
+            }else{
+                map.put("msg", "密码不正确，注销失败");
             }
+        }else {
+            map.put("msg", "用户不存在");
         }
-        map.put("msg", "密码不正确，注销失败");
+
         return map;
     }
 
@@ -66,7 +71,6 @@ public class ZjsUserService extends CommonFather {
         super.validateEmpty("password", password);
         super.validateEmpty("newPassword", newPassword);
 
-        int result = 0;
         UserZJS userZJS = zjsLoginDao.selectByName(username, RootConstant.STATUS_0);
         if (userZJS != null){
             String pwd = password;
@@ -74,19 +78,22 @@ public class ZjsUserService extends CommonFather {
             pwd = RootUtils.MD5(pwd);
 
             if (pwd.equals(userZJS.getPassword())){
-                // todo sql验证
-
                 String newPwd = newPassword + CommonZJS.MD5_SALT;
                 newPwd = RootUtils.MD5(newPwd);
-
-                result = zjsUserDao.updatePassword(userZJS.getId(), newPwd);
-                if (result == 1){
+                try{
+                    zjsUserDao.updatePassword(userZJS.getId(), newPwd);
                     map.put("msg", "success");
-                    return map;
+                }catch (Exception e){
+                    map.put("msg", "数据库错误");
+                    e.printStackTrace();
                 }
+            }else {
+                map.put("msg", "密码不正确，更改失败");
             }
+        }else{
+            map.put("msg","用户不存在");
         }
-        map.put("msg", "密码不正确，更改失败");
+
         return map;
     }
 

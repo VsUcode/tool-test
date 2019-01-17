@@ -3,6 +3,7 @@ package com.keyboardman.tool.root.service;
 import com.keyboardman.tool.root.dao.LoginDao;
 import com.keyboardman.tool.root.model.User;
 import com.keyboardman.tool.root.utils.CommonFather;
+import com.keyboardman.tool.root.utils.CommonMessage;
 import com.keyboardman.tool.root.utils.RootConstant;
 import com.keyboardman.tool.root.utils.RootUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class LoginService extends CommonFather {
     @Autowired
     private LoginDao loginDao;
 
+    @Autowired
+    private CommonMessage commonMessage;
     /**
      * 注册
      * @param user
@@ -39,13 +42,15 @@ public class LoginService extends CommonFather {
         //密码强度
         String password = user.getPassword();
         password += RootConstant.ROOT_USER_POWER;
-        String passwordResult= null;
-        passwordResult = RootUtils.MD5(password);
+        String passwordResult= RootUtils.MD5(password);;
         user.setPassword(passwordResult);
-        int flag = loginDao.addUser(user);
-        if (flag == 1){
+        try{
+            loginDao.addUser(user);
             map.put("msg", "success");
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
         return map;
     }
 
@@ -68,13 +73,14 @@ public class LoginService extends CommonFather {
 
             if (pwd.equals(isUser.getPassword())){
                 map.put("msg", "success");
-                return map;
+            }else {
+                map.put("msg", "登录失败，请检查用户名或密码");
             }
-            map.put("msg", "登录失败，请检查用户名或密码");
-            return map;
+
+        }else {
+            map.put("msg", "用户不存在");
         }
 
-        map.put("msg", "用户不存在");
         return map;
     }
 

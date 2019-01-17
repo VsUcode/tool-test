@@ -36,14 +36,11 @@ public class ZjsCarCheckService extends CommonFather {
         }
         //日期加一天
         Date starttime = time;
-//        Calendar rightNow = Calendar.getInstance();
-//        rightNow.setTime(time);
-//        rightNow.add(Calendar.DAY_OF_YEAR,1);//日期加10天
-//        Date endtime = rightNow.getTime();
+
         Date endtime = CommonZJS.addOneDay(time);
 
         List<CarZJS> list = zjsCarDao.selectCheckList(starttime, endtime);
-//        跨天的
+        // 跨天的
         List<CarZJS> list1 = zjsCarDao.selectCheckList1(time);
         list.addAll(list1);
         Calendar calendar = Calendar.getInstance();//日历对象

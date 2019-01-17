@@ -44,10 +44,14 @@ public class ZjsLoginService extends CommonFather {
         password += CommonZJS.MD5_SALT;
         String passwordResult= RootUtils.MD5(password);
         user.setPassword(passwordResult);
-        int flag = zjsLoginDao.addUser(user);
-        if (flag == 1){
+        try{
+            zjsLoginDao.addUser(user);
             map.put("msg", "success");
+        }catch (Exception e){
+            map.put("msg", "数据库错误");
+            e.printStackTrace();
         }
+
         return map;
     }
 
@@ -70,13 +74,13 @@ public class ZjsLoginService extends CommonFather {
 
             if (pwd.equals(userZJS.getPassword())){
                 map.put("msg", "success");
-                return map;
+            }else {
+                map.put("msg", "登录失败，请检查用户名或密码");
             }
-            map.put("msg", "登录失败，请检查用户名或密码");
-            return map;
+        }else {
+            map.put("msg", "用户不存在");
         }
 
-        map.put("msg", "用户不存在");
         return map;
     }
 

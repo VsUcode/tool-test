@@ -46,21 +46,23 @@ public class ZjsBookCarService extends CommonFather {
             return map;
         }
         UserZJS userZJS = zjsLoginDao.selectByName(car.getBooker(), RootConstant.STATUS_0);
-        if (userZJS!=null && userZJS.getPower()==0){
+        if (userZJS != null && userZJS.getPower()==0){
             car.setStatus(RootConstant.STATUS_0);
-        }else if (userZJS!=null && userZJS.getPower()==1){
+        }else if (userZJS != null && userZJS.getPower()==1){
             car.setStatus(RootConstant.STATUS_1);
+        }else{
+            map.put("msg", "用户不存在");
+            return map;
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMDDhhmmss");
         car.setBookid(sdf.format(car.getStarttime()));
-        int result = 0;
-        result = zjsCarDao.addBook(car);
-        if (result == 1){
+        try{
+            zjsCarDao.addBook(car);
             map.put("msg", "success");
-            return map;
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
-        map.put("msg", "当前时间段被使用");
         return map;
     }
 
@@ -73,21 +75,21 @@ public class ZjsBookCarService extends CommonFather {
     public Map<String, String> addBookFeedback(String bookid, String feedback) {
         super.validateEmpty("bookid", bookid);
         super.validateEmpty("feedback", feedback);
-
         Map<String, String> map = new HashMap<>();
-        int result = 0;
+
         CarZJS carZJS = selectCarByBookid(bookid);
         if (carZJS != null){
-            result = zjsCarDao.addBookFeedback(bookid, feedback);
+            try{
+                zjsCarDao.addBookFeedback(bookid, feedback);
+                map.put("msg", "success");
+            }catch (Exception e){
+                map.put("msg", "数据库错误");
+                e.printStackTrace();
+            }
         }else{
             map.put("msg", "订单不存在");
-            return map;
         }
-        if (result == 1){
-            map.put("msg", "success");
-            return map;
-        }
-        map.put("msg", "未知原因失败");
+
         return map;
     }
 
@@ -166,7 +168,7 @@ public class ZjsBookCarService extends CommonFather {
     public Map<String, String> checktime(Date starttime, Date endtime) throws ParseException {
         Map<String, String> map = new HashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date newtime = null;
+
         if (starttime == null || endtime ==null){
             map.put("msg", "时间不能为空");
             return map;

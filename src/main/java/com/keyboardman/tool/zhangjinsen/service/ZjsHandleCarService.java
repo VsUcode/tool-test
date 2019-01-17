@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 public class ZjsHandleCarService extends CommonFather {
-
+    private Lock lock = new ReentrantLock();
     @Autowired
     private ZjsCarDao zjsCarDao;
 
@@ -89,22 +91,22 @@ public class ZjsHandleCarService extends CommonFather {
         super.validateEmpty("status", status);
         Map<String, String> map = new HashMap<>();
 
-        int result = 0;
-        synchronized (this){
+       lock.lock();
+        try{
             CarZJS carZJS = zjsCarDao.selectCarById(id);
             if (carZJS.getStatus() != 1){
                 map.put("msg", "审批失败，已被他人审批");
                 return map;
             }
-            result = zjsCarDao.handleCar(id, status, spyj);
-        }
-
-        if (result == 1){
+            zjsCarDao.handleCar(id, status, spyj);
             map.put("msg", "success");
-            return map;
+        }catch (Exception e){
+            map.put("msg", "数据库错误");
+            e.printStackTrace();
+        }finally {
+            lock.unlock();
         }
 
-        map.put("msg", "审批失败");
         return map;
     }
 
@@ -122,15 +124,15 @@ public class ZjsHandleCarService extends CommonFather {
             map.put("msg", "删除失败，已被他人删除");
             return map;
         }
-        int result = 0;
-        result = zjsCarDao.deleteCar(id, RootConstant.STATUS_3);
 
-        if (result == 1){
+        try{
+            zjsCarDao.deleteCar(id, RootConstant.STATUS_3);
             map.put("msg", "success");
-            return map;
+        }catch (Exception e){
+            map.put("msg", "数据库错误");
+            e.printStackTrace();
         }
 
-        map.put("msg", "删除失败");
         return map;
     }
 
