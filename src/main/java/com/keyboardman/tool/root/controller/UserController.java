@@ -29,10 +29,8 @@ public class UserController {
      */
     @RequestMapping("/deleteUser")
     public Map<String, String> deleteUser(String password) throws UnsupportedEncodingException {
-        Map<String, String> map = new HashMap<>();
-
         String username = hostHolder.getUser().getUsername();
-        map = userService.deleteUser(username, password);
+        Map<String, String> map = userService.deleteUser(username, password);
 
         return map;
     }
