@@ -1,0 +1,33 @@
+create table zjs_user
+(
+  id       int auto_increment
+    primary key,
+  username varchar(32)   not null,
+  password varchar(32)   not null,
+  phone    varchar(11)   not null,
+  power    int default 1 not null,
+  status   int default 0 not null,
+  openid   varchar(128)  null comment '小程序用户'
+);
+
+
+
+create table zjs_car
+(
+  id           int auto_increment
+    primary key,
+  booker       varchar(32)   not null comment '订车人',
+  booker_phone varchar(11)   not null comment '订车人电话',
+  car_user     varchar(21)   not null comment '使用人',
+  user_phone   varchar(11)   not null comment '使用人电话',
+  starttime    datetime      not null comment '开始时间',
+  endtime      datetime      not null comment '结束时间',
+  start_site   varchar(200)  not null comment '起点',
+  end_site     varchar(200)  not null comment '终点',
+  status       int default 2 not null,
+  remark       varchar(200)  null comment '备注',
+  spyj         varchar(200)  null comment '审批意见',
+  bookid       varchar(32)   not null comment '订单号',
+  feedback     varchar(200)  null comment '评价'
+);
+
